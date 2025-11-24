@@ -1,0 +1,48 @@
+# .github/workflows/be.yml
+name: 🛡️ Backend CI/CD
+
+# Kích hoạt khi có push hoặc pull_request vào branch main
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**' # CHỈ chạy nếu có thay đổi trong thư mục 'backend/'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+
+jobs:
+  build-and-test-be:
+    runs-on: ubuntu-latest
+
+    # Thiết lập working directory mặc định cho tất cả các steps
+    defaults:
+      run:
+        working-directory: ./backend # Điều chỉnh theo thư mục BE của bạn
+
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python (Ví dụ)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10' # Điều chỉnh version ngôn ngữ/runtime của bạn
+
+      - name: 📦 Install dependencies
+        run: pip install -r requirements.txt # Thay thế bằng lệnh cài đặt của bạn
+
+      - name: 🧪 Run tests
+        run: pytest # Thay thế bằng lệnh test thực tế của bạn
+
+      # Ví dụ bước build/publish Docker Image
+      # - name: 🐳 Build & Push Docker image
+      #   uses: docker/build-push-action@v5
+      #   ...
+
+  # Thêm job deploy nếu bạn muốn triển khai tự động
+  # deploy-be:
+  #   needs: build-and-test-be
+  #   runs-on: ubuntu-latest
+  #   ...

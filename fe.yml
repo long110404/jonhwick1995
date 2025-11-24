@@ -1,0 +1,54 @@
+# .github/workflows/fe.yml
+name: 🚀 Frontend CI/CD
+
+# Kích hoạt khi có push hoặc pull_request vào branch main
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'frontend/**' # CHỈ chạy nếu có thay đổi trong thư mục 'frontend/'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'frontend/**'
+
+jobs:
+  build-and-test-fe:
+    runs-on: ubuntu-latest
+
+    # Thiết lập working directory mặc định cho tất cả các steps trong job này
+    defaults:
+      run:
+        working-directory: ./frontend # Điều chỉnh theo thư mục FE của bạn
+
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Điều chỉnh version Node.js của bạn
+
+      - name: 📦 Install dependencies
+        run: npm install # Hoặc yarn install/pnpm install
+
+      - name: 🧪 Run tests
+        # Thay thế bằng lệnh test thực tế của bạn
+        run: npm run test
+
+      - name: 🔨 Build Frontend
+        # Thay thế bằng lệnh build thực tế của bạn
+        run: npm run build
+
+      - name: ⬆️ Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: ./frontend/dist # Thay thế 'dist' bằng thư mục build của bạn
+
+  # Thêm job deploy nếu bạn muốn triển khai tự động
+  # deploy-fe:
+  #   needs: build-and-test-fe # Chỉ chạy khi job build-and-test-fe thành công
+  #   runs-on: ubuntu-latest
+  #   ...
